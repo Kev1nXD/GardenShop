@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView, DetailView
 
-from .models import Category
+from .models import Category, Product
 
 
 class MainPageView(TemplateView):
@@ -11,3 +11,10 @@ class MainPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all().prefetch_related('subcategory_set')
         return context
+
+
+class ProductPageView(DetailView):
+    template_name = 'product_page.html'
+    model = Product
+    context_object_name = 'product'
+

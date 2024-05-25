@@ -109,7 +109,6 @@
     }
     .category:hover .dropdown-arrow {
         transform: rotate(90deg);
-        transition: transform 0.s ease-in-out;
     }
 </style>
 <body>
@@ -132,15 +131,16 @@
             <aside></aside>
             <section>
                 <div class="header_nav">
+                {% for category in categories %}
                     <ul class="product_categories">
-                        {% for category in categories %}
-                            <li class="category">{{ category.name }} <img class="dropdown-arrow" src="{% static 'images/dropdown_arrow.png' %}" alt="" id="category-{{ category.id }}">
-                                <ul class="hidden subcategories">
-                                    {% for subcategory in category.subcategory_set.all %}
-                                        <li>{{ subcategory.name }}</li>
-                                    {% endfor %}
-                        {% endfor %}
+                        <li class="category">{{ category.name }} <img class="dropdown-arrow" src="{% static 'images/dropdown_arrow.png' %}" alt="" id="category-{{ category.id }}">
+                            <ul class="hidden subcategories">
+                                {% for subcategory in category.subcategory_set.all %}
+                                    <li>{{ subcategory.name }}</li>
+                                {% endfor %}
+                            </ul>
                     </ul>
+                {% endfor %}
                 </div>
             </section>
         </div>

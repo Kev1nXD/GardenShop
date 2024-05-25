@@ -47,7 +47,6 @@ class ManufacturerAdmin(admin.ModelAdmin):
         ('Виробник', {'fields': ('name',)}),  # Corrected 'field' to 'fields'
     )
 
-
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'rate', 'review_number', 'price', 'discount', 'sub_category', 'image')

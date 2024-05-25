@@ -56,7 +56,7 @@ class Product(models.Model):
     size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, blank=True, null=True)
     image = models.ImageField(upload_to='images/')
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=True, null=True
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.name

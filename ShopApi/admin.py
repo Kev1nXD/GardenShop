@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, SubCategory, Color, Size, Product
+from .models import Category, SubCategory, Color, Size, Product, Manufacturer
 
 
 @admin.register(Category)
@@ -27,6 +27,24 @@ class ColorAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     fieldsets = (
         ('Колір', {'fields': ('name',)}),  # Corrected 'field' to 'fields'
+    )
+
+@admin.register(Size)
+class SizeAdmin(admin.ModelAdmin):
+    list_display = ('height', 'width', 'weight')
+    list_filter = ('height', 'width', 'weight')
+    fieldsets = (
+        ('Висота', {'fields': ('height',)}),  # Corrected 'field' to 'fields'
+        ('Ширина', {'fields': ('width',)}),  # Corrected 'field' to 'fields'
+        ('Вага', {'fields': ('weight',)}),  # Corrected 'field' to 'fields'
+    )
+
+@admin.register(Manufacturer)
+class ManufacturerAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_filter = ('name',)
+    fieldsets = (
+        ('Виробник', {'fields': ('name',)}),  # Corrected 'field' to 'fields'
     )
 
 

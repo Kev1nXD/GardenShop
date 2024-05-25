@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, SubCategory, Characteristic, Product
+from .models import Category, SubCategory, Color, Size, Product
 
 
 @admin.register(Category)
@@ -21,14 +21,12 @@ class SubCategoryAdmin(admin.ModelAdmin):
         ('Категорія', {'fields': ('category',)})  # Corrected the key to 'fields'
     )
 
-
-@admin.register(Characteristic)
-class CharacteristicAdmin(admin.ModelAdmin):
-    list_display = ('type', 'value')
-    list_filter = ('type', 'value')
+@admin.register(Color)
+class ColorAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_filter = ('name',)
     fieldsets = (
-        ('Тип', {'fields': ('type',)}),  # Fixed 'fileds' to 'fields'
-        ('Значення', {'fields': ('value',)})  # Fixed 'fileds' to 'fields'
+        ('Колір', {'fields': ('name',)}),  # Corrected 'field' to 'fields'
     )
 
 
@@ -43,5 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
         ('Знижка', {'fields': ('discount',)}),  # Corrected 'field' to 'fields'
         ('Підкатегорія', {'fields': ('sub_category',)}),  # Corrected 'field' to 'fields'
         ('Картинка', {'fields': ('image',)}),  # Corrected 'field' to 'fields'
-        ('Характеристики', {'fields': ('characteristics',)}),  # Corrected 'field' to 'fields'
+        ('Характеристики', {'fields': ('size',)}),  # Corrected 'field' to 'fields'
+        ('Виробник', {'fields': ('manufacturer',)}),  # Corrected 'field' to 'fields'
+        ('Колір', {'fields': ('color',)}),  # Corrected 'field' to 'fields'
     )

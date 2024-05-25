@@ -133,10 +133,10 @@
             <section>
                 <div class="header_nav">
                     <ul class="product_categories">
-                        {% for category in categories_subcategories %}
+                        {% for category in categories %}
                             <li class="category">{{ category.name }} <img class="dropdown-arrow" src="{% static 'images/dropdown_arrow.png' %}" alt="" id="category-{{ category.id }}">
                                 <ul class="hidden subcategories">
-                                    {% for subcategory in category.subcategories %}
+                                    {% for subcategory in category.subcategory_set.all %}
                                         <li>{{ subcategory.name }}</li>
                                     {% endfor %}
                         {% endfor %}

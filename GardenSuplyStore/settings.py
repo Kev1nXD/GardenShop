@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'GardenSuplyStore.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ["DB_HOST"],
-        "NAME": os.environ["DB_NAME"],
-        "USER": os.environ["DB_USER"],
-        "PASSWORD": os.environ["DB_PASSWORD"]
+        "HOST": 'cornelius.db.elephantsql.com',
+        "NAME": 'thdubrtf',
+        "USER": 'thdubrtf',
+        "PASSWORD": 'Lf9Dxi0YJcWBOplLdGTfoaSccX9dtvk8'
     }
 }
 
@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk-UA'
 
 TIME_ZONE = 'UTC'
 

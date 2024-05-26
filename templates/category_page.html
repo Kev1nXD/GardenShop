@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ category.name }} - E-garden</title>
+    {% load static %}
+    <style>
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+      }
+      header {
+        display: flex;
+        flex-direction: column;
+        background-color: #e5b13a;
+        color: #fff;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+      .circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: red;
+        margin-right: 15px;
+      }
+      .site_name h2 {
+        margin: 0;
+      }
+      .search_bar {
+        display: flex;
+        align-items: center;
+        background-color: grey;
+        height: 35px;
+        width: 50%;
+        border-radius: 20px;
+        margin: 20px 0;
+      }
+      .search_ico {
+        background-color: #fff;
+        width: 20px;
+        height: 20px;
+        margin: 0 15px;
+      }
+      .shop_cart {
+        width: 40px;
+        height: 40px;
+        margin-right: 5%;
+      }
+      .shop_cart img {
+        width: 100%;
+        height: 100%;
+      }
+      .search_input {
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 0;
+        padding-left: 5px;
+        border-radius: 20px 0 0 20px;
+      }
+      .header_up {
+        display: flex;
+        height: 80px;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .search_btn {
+        height: 35px;
+        border-radius: 0 20px 20px 0;
+        border: 0;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .main {
+        display: flex;
+      }
+      .sidebar {
+        width: 250px;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 120px;
+        left: 0;
+
+        overflow-y: auto;
+      }
+      .header_nav {
+        font-size: 18px;
+        margin-top: 20px;
+      }
+      .product_categories {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        padding-left: 0;
+      }
+      .category {
+        cursor: pointer;
+        user-select: none;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f1f1f1;
+        position: relative;
+      }
+      .category:hover {
+        background-color: #f1f1f1;
+      }
+      .category:hover .subcategories {
+        display: block;
+      }
+      .dropdown-arrow {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.2s ease-in-out;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .category:hover .dropdown-arrow {
+        transform: rotate(90deg) translateY(-50%);
+      }
+      .subcategories {
+        display: none;
+        background-color: #f9f9f9;
+        padding-left: 20px;
+        border-top: 1px solid #f1f1f1;
+      }
+      .subcategories li {
+        padding: 10px 0;
+        list-style-type: none;
+      }
+      .main_content {
+        margin-left: 270px; /* Достаточно места для боковой панели */
+        padding: 20px;
+        flex-grow: 1;
+      }
+      .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .product-item {
+        position: relative; /* Разрешаем абсолютное позиционирование внутри */
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 4px;
+        width: calc(22.333% - 20px);
+        box-sizing: border-box;
+        margin-right: 20px; /* Отступ между карточками товаров */
+      }
+      .product-item img {
+        display: block;
+        margin-bottom: 10px;
+        width: 313px; /* Фиксированная ширина */
+        height: 313px; /* Фиксированная высота */
+        object-fit: cover; /* Заполнение всего контейнера, сохраняя соотношение сторон */
+      }
+      .product-item h3,
+      .product-item p {
+        margin-top: 10px; /* Отступ между заголовком и описанием товара */
+      }
+
+      .product-item .price {
+        margin-top: auto; /* Помещаем цену внизу блока */
+        align-self: flex-end;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .site_name a h2 {
+        color: white;
+      }
+      .main_content h3 {
+        font-size: 25px;
+      }
+      .main_content p {
+        font-size: 20px;
+      }
+      .sidebar {
+        width: 250px;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 80px;
+        left: 0;
+        overflow-y: auto;
+      }
+
+      .header_nav {
+        font-size: 18px;
+        margin-top: 20px;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      select,
+      input[type="number"],
+      input[type="submit"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+      }
+
+      select {
+        height: 35px;
+      }
+
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      .product-item .buy-btn {
+        order: 1; /* Устанавливаем порядок кнопки "Купить" */
+        align-self: flex-end; /* Размещаем кнопку "Купить" в конце блока */
+        padding: 10px 20px; /* Задаем внутренние отступы */
+        background-color: #4caf50; /* Цвет фона кнопки */
+        color: white; /* Цвет текста */
+        border: none; /* Убираем границу кнопки */
+        border-radius: 4px; /* Закругляем углы кнопки */
+        font-size: 16px; /* Размер шрифта */
+        cursor: pointer; /* Устанавливаем курсор в виде указателя при наведении */
+      }
+
+      .product-item .buy-btn:hover {
+        background-color: #45a049; /* Изменяем цвет фона при наведении */
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header_up">
+        <div class="logo">
+          <div class="circle"></div>
+          <div class="site_name">
+            <a href="{% url 'main_page' %}"><h2>E-garden</h2></a>
+          </div>
+        </div>
+        <div class="search_bar">
+          <div class="search_ico"></div>
+          <input class="search_input" placeholder="Пошук товарів..." />
+          <button class="search_btn">Знайти</button>
+        </div>
+        <div class="shop_cart">
+          <img
+            src="../static/images/cart-shopping-svgrepo-com (1).png"
+            alt=""
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="main">
+      <aside class="sidebar">
+        <div class="header_nav">
+          <h2>Фільтри</h2>
+          <form method="GET">
+            <label for="color">Колір:</label>
+            <select name="color" id="color">
+              <option value="">Усі</option>
+              {% for color in colors %}
+              <option value="{{ color.id }}">{{ color.name }}</option>
+              {% endfor %}</select
+            ><br />
+
+            <label for="manufacturer">Країна виробник:</label>
+            <select name="manufacturer" id="manufacturer">
+              <option value="">Усі</option>
+              {% for manufacturer in manufacturers %}
+              <option value="{{ manufacturer.id }}">
+                {{ manufacturer.name }}
+              </option>
+              {% endfor %}</select
+            ><br />
+
+            <label for="min_price">Мін. ціна:</label>
+            <input
+              type="number"
+              name="min_price"
+              id="min_price"
+              min="0"
+              step="0.01"
+            /><br />
+
+            <label for="max_price">Макс. ціна:</label>
+            <input
+              type="number"
+              name="max_price"
+              id="max_price"
+              min="0"
+              step="0.01"
+            /><br />
+
+            <input type="submit" value="Застосувати" />
+          </form>
+        </div>
+      </aside>
+
+      <div class="main_content">
+        <h1>{{ category.name }}</h1>
+        <div class="product-list">
+          {% for product in products %}
+          <div class="product-item">
+            <a
+              href="{% url 'product_page' pk=product.pk %}"
+              class="product-link"
+              data-id="{{ product.pk }}"
+            >
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              <h3>{{ product.name }}</h3>
+              <p>{{ product.description }}</p>
+            </a>
+            <p class="price">{{ product.price }} грн.</p>
+            <button
+              class="buy-btn"
+              data-id="{{ product.pk }}"
+              data-name="{{ product.name }}"
+              data-price="{{ product.price }}"
+              data-image="{{ product.image.url }}"
+            >
+              До кошика
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Получаем все ссылки на товары
+      const productLinks = document.querySelectorAll(".product-link");
+
+      // Обработчик события для нажатия на ссылку на товар
+      productLinks.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          // Получаем id товара из атрибута data-id ссылки
+          const productId = event.currentTarget.getAttribute("data-id");
+
+          // Получаем данные из localStorage
+          let viewedProducts = localStorage.getItem("viewedProducts");
+
+          // Если в локальном хранилище уже есть просмотренные товары
+          if (viewedProducts) {
+            viewedProducts = JSON.parse(viewedProducts);
+            // Проверяем, есть ли текущий товар в списке просмотренных
+            if (!viewedProducts.includes(productId)) {
+              // Добавляем id товара в список просмотренных
+              viewedProducts.push(productId);
+              // Сохраняем обновленный список в localStorage
+              localStorage.setItem(
+                "viewedProducts",
+                JSON.stringify(viewedProducts)
+              );
+            }
+          } else {
+            // Если в локальном хранилище еще нет просмотренных товаров
+            viewedProducts = [productId];
+            // Сохраняем список просмотренных товаров в localStorage
+            localStorage.setItem(
+              "viewedProducts",
+              JSON.stringify(viewedProducts)
+            );
+          }
+        });
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Получаем все кнопки "Купить"
+      const buyButtons = document.querySelectorAll(".buy-btn");
+
+      // Обработчик события для нажатия на кнопку "Купить"
+      buyButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+          // Получаем id товара из атрибута data-id кнопки
+          const productId = event.currentTarget.getAttribute("data-id");
+          const productName = event.currentTarget.getAttribute("data-name");
+          const productPrice = event.currentTarget.getAttribute("data-price");
+          const productImage = event.currentTarget.getAttribute("data-image");
+          // Получаем данные из localStorage
+          let cartItems = localStorage.getItem("cartItems");
+
+          // Если в локальном хранилище уже есть товары в корзине
+          if (cartItems) {
+            cartItems = JSON.parse(cartItems);
+            // Проверяем, есть ли текущий товар в корзине
+            if (!cartItems.includes(productId)) {
+              // Добавляем id товара в корзину
+              cartItems.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                img: productImage,
+                quantity: 1,
+              });
+              // Сохраняем обновленный список в localStorage
+              localStorage.setItem("cartItems", JSON.stringify(cartItems));
+              // Оповещаем пользователя о добавлении товара в корзину
+              alert("Товар успешно добавлен в корзину!");
+            } else {
+              // Если товар уже был добавлен в корзину, выводим сообщение об этом
+              alert("Этот товар уже добавлен в корзину!");
+            }
+          } else {
+            // Если в локальном хранилище еще нет товаров в корзине
+            cartItems = [
+              {
+                id: productId,
+                name: productName,
+                price: productPrice,
+                img: productImage,
+                quantity: 1,
+              },
+            ];
+            // Сохраняем список товаров в корзине в localStorage
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            // Оповещаем пользователя о добавлении товара в корзину
+            alert("Товар успішно додано до корзини!");
+          }
+        });
+      });
+    });
+  </script>
+</html>

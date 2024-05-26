@@ -9,8 +9,6 @@ class MainPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        local_storage = self.request.COOKIES.get('local_storage', {})
-        print(local_storage)
         context["categories"] = Category.objects.all().prefetch_related('subcategory_set')
         return context
 
@@ -65,3 +63,7 @@ class CategoryPageView(ListView):
         context['colors'] = Color.objects.all()
         context['manufacturers'] = Manufacturer.objects.all()
         return context
+
+
+class CartPageView(TemplateView):
+    template_name = 'cart.html'

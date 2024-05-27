@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, SubCategory, Color, Size, Product, Manufacturer
+from .models import Category, Review, SubCategory, Color, Size, Product, Manufacturer
 
 
 @admin.register(Category)
@@ -61,4 +61,9 @@ class ProductAdmin(admin.ModelAdmin):
         ('Характеристики', {'fields': ('size',)}),  # Corrected 'field' to 'fields'
         ('Виробник', {'fields': ('manufacturer',)}),  # Corrected 'field' to 'fields'
         ('Колір', {'fields': ('color',)}),  # Corrected 'field' to 'fields'
+        
     )
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('customer_name', 'review')

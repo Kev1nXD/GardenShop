@@ -129,18 +129,7 @@
       .category:hover .subcategories {
         display: block;
       }
-      .dropdown-arrow {
-        width: 20px;
-        height: 20px;
-        transition: transform 0.2s ease-in-out;
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-      .category:hover .dropdown-arrow {
-        transform: rotate(90deg) translateY(-50%);
-      }
+
       .subcategories {
         font-size: 20px;
         display: none;
@@ -173,7 +162,7 @@
         </div>
         <div class="search_bar">
           <div class="search_ico">
-            <img src="../static/images/search-svgrepo-com.png" alt="" />
+            <img src="{% static '/Images/search-svgrepo-com.png' %}" alt="" />
           </div>
           <input class="search_input" placeholder="Пошук товарів..." />
           <button class="search_btn">Знайти</button>
@@ -195,21 +184,18 @@
           <ul class="product_categories">
             {% for category in categories %}
             <li class="category">
-              <a href="{% url 'category_page' category.id %}"
-                >{{ category.name }}</a
-              >
-              <img
-                class="dropdown-arrow"
-                src="{% static 'images/dropdown_arrow.png' %}"
-                alt=""
-                id="category-{{ category.id }}"
-              />
+              <a href="{% url 'category_page' category.id %}">
+                {{ category.name }}
+              </a>
+
               <ul class="subcategories">
                 {% for subcategory in category.subcategory_set.all %}
                 <li>
-                  <a href="{% url 'category_page' category.id subcategory.id %}"
-                    >{{ subcategory.name }}</a
+                  <a
+                    href="{% url 'category_page' category.id subcategory.id %}"
                   >
+                    {{ subcategory.name }}
+                  </a>
                 </li>
                 {% endfor %}
               </ul>

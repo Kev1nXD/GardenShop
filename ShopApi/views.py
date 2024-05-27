@@ -1,8 +1,8 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.views.generic import View, TemplateView, DetailView, ListView
 
-from .models import Category, Color, Manufacturer, Product, SubCategory
+from .models import Category, Color, Manufacturer, Product, Review, SubCategory
 
 class MainPageView(TemplateView):
     template_name = 'main_page.html'
@@ -16,6 +16,16 @@ class ProductPageView(DetailView):
     template_name = 'product_page.html'
     model = Product
     context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.object.reviews.all().count() != 0:
+            
+            context['raitings'] = round((float(self.object.rate) / self.object.reviews.all().count()), 2)
+        return context
+
+
+
 
 class CategoryPageView(ListView):
     template_name = 'category_page.html'
@@ -67,3 +77,23 @@ class CategoryPageView(ListView):
 
 class CartPageView(TemplateView):
     template_name = 'cart.html'
+
+
+class SaveReview(View):
+
+    def post(self, request, *args, **kwargs):
+        pk = self.request.POST.get("id")
+        user_name = self.request.POST.get('user-name')
+        rating = self.request.POST.get('rating')
+        comment = self.request.POST.get('comment')
+       
+        if (user_name and rating and comment):
+            product = Product.objects.get(pk=pk)
+            Review.objects.create(product=product, customer_name=user_name, review=comment)
+            product.rate = (float(rating) + float(product.rate)) if product.rate else float(rating)
+            product.save()
+            return redirect('product_page', pk=pk)
+
+
+
+

@@ -45,10 +45,13 @@
         margin: 20px 0;
       }
       .search_ico {
-        background-color: #fff;
         width: 20px;
         height: 20px;
         margin: 0 15px;
+      }
+      .search_ico img {
+        width: 100%;
+        height: 100%;
       }
       .shop_cart {
         width: 40px;
@@ -267,15 +270,19 @@
           </div>
         </div>
         <div class="search_bar">
-          <div class="search_ico"></div>
+          <div class="search_ico">
+            <img src="{% static '/Images/search-svgrepo-com.png' %}" alt="" />
+          </div>
           <input class="search_input" placeholder="Пошук товарів..." />
           <button class="search_btn">Знайти</button>
         </div>
         <div class="shop_cart">
-          <img
-            src="../static/images/cart-shopping-svgrepo-com (1).png"
-            alt=""
-          />
+          <a href="{% url 'cart_page' %}">
+            <img
+              src="{% static 'images/cart-shopping-svgrepo-com (1).png' %}"
+              alt="Корзина"
+            />
+          </a>
         </div>
       </div>
     </header>

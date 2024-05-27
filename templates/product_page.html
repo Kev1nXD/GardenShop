@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>{{ product.name }}</title>
+    {% load static %} {% csrf_token %}
     <style>
       a {
         color: #000;
@@ -44,10 +45,13 @@
         margin: 20px 0;
       }
       .search_ico {
-        background-color: #fff;
         width: 20px;
         height: 20px;
         margin: 0 15px;
+      }
+      .search_ico img {
+        width: 100%;
+        height: 100%;
       }
       .shop_cart {
         width: 40px;
@@ -92,6 +96,7 @@
         width: 313px; /* Фиксированная ширина */
         height: 313px; /* Фиксированная высота */
         object-fit: cover; /* Заполнение всего контейнера, сохраняя соотношение сторон */
+        margin-left: 30%;
       }
       .product-details {
         margin-top: 20px;
@@ -113,6 +118,103 @@
       .site_name a h2 {
         color: white;
       }
+      .buy-btn {
+        order: 1; /* Устанавливаем порядок кнопки "Купить" */
+        align-self: flex-end; /* Размещаем кнопку "Купить" в конце блока */
+        padding: 10px 20px; /* Задаем внутренние отступы */
+        background-color: #4caf50; /* Цвет фона кнопки */
+        color: white; /* Цвет текста */
+        border: none; /* Убираем границу кнопки */
+        border-radius: 4px; /* Закругляем углы кнопки */
+        font-size: 16px; /* Размер шрифта */
+        cursor: pointer; /* Устанавливаем курсор в виде указателя при наведении */
+      }
+
+      .buy-btn:hover {
+        background-color: #45a049; /* Изменяем цвет фона при наведении */
+      }
+
+      .star-rating {
+        display: flex;
+        font-size: 20px;
+        cursor: pointer;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+      }
+
+      .star-rating .star {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url("{% static '/Images/star.svg' %}") no-repeat center;
+        background-size: cover;
+      }
+
+      .star-rating .star.active,
+      .star-rating .star:hover,
+      .star-rating .star:hover ~ .star {
+        background: url("{% static '/Images/colored-star.svg' %}") no-repeat
+          center;
+        background-size: cover;
+      }
+
+      .comment-section {
+        margin-top: 20px;
+      }
+
+      .comment-section h2 {
+        font-size: 24px;
+      }
+
+      .comment-section form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .comment-section label {
+        margin-top: 10px;
+        font-size: 16px;
+      }
+
+      .comment-section input,
+      .comment-section textarea {
+        margin-top: 5px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .comment-section button {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .comment-section button:hover {
+        background-color: #45a049;
+      }
+      .product-name-and-raiting {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .product-name-and-raiting img {
+        width: 30px;
+        height: 30px;
+      }
+      .raiting {
+        display: flex;
+        align-items: center;
+      }
+      .raiting p {
+        font-weight: bold;
+        font-size: 25px;
+        margin: 5px 0px 0px 5px;
+      }
     </style>
   </head>
   <body>
@@ -125,15 +227,19 @@
           </div>
         </div>
         <div class="search_bar">
-          <div class="search_ico"></div>
+          <div class="search_ico">
+            <img src="{% static '/Images/search-svgrepo-com.png' %}" alt="" />
+          </div>
           <input class="search_input" placeholder="Пошук товарів..." />
           <button class="search_btn">Знайти</button>
         </div>
         <div class="shop_cart">
-          <img
-            src="../static/images/cart-shopping-svgrepo-com (1).png"
-            alt=""
-          />
+          <a href="{% url 'cart_page' %}">
+            <img
+              src="{% static 'images/cart-shopping-svgrepo-com (1).png' %}"
+              alt="Корзина"
+            />
+          </a>
         </div>
       </div>
     </header>
@@ -144,10 +250,179 @@
         class="product-image"
       />
       <div class="product-details">
-        <h1 class="product-title">{{ product.name }}</h1>
+        <div class="product-name-and-raiting">
+          <h1 class="product-title">{{ product.name }}</h1>
+          <div class="raiting">
+            {% if raitings %}
+            <img src="{% static '/Images/colored-star.svg' %}" alt="" />
+            <p>{{ raitings }}</p>
+            {% endif %}
+          </div>
+        </div>
+
         <p class="product-price">{{ product.price }} грн.</p>
         <p class="product-description">{{ product.description }}</p>
       </div>
+      <button
+        class="buy-btn"
+        data-id="{{ product.pk }}"
+        data-name="{{ product.name }}"
+        data-price="{{ product.price }}"
+        data-image="{{ product.image.url }}"
+      >
+        До кошика
+      </button>
+      <div class="comment-section">
+        <h2>Залишити відгук</h2>
+        <form action="{% url 'save_review' %}" id="comment-form" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{ product.pk }}" />
+          <label for="user-name">Ім'я:</label>
+          <input type="text" id="user-name" name="user-name" required />
+
+          <label for="rating">Оцінка:</label>
+          <div id="star-rating" class="star-rating">
+            <span data-value="5" class="star"></span>
+            <span data-value="4" class="star"></span>
+            <span data-value="3" class="star"></span>
+            <span data-value="2" class="star"></span>
+            <span data-value="1" class="star"></span>
+          </div>
+
+          <input type="hidden" id="rating" name="rating" />
+
+          <label for="comment">Коментарій:</label>
+          <textarea id="comment" name="comment" rows="4" required></textarea>
+
+          <button type="submit">Відправити</button>
+        </form>
+      </div>
+
+      <div class="reviews">
+        <h2>Відгуки:</h2>
+        <ul>
+          {% for review in product.reviews.all %}
+          <li>
+            <strong>{{ review.customer_name }}</strong>: {{ review.review }}
+          </li>
+          {% empty %}
+          <li>На цей товар немає відгуків&#40;</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Получаем все кнопки "Купить"
+      const buyButtons = document.querySelectorAll(".buy-btn");
+
+      // Обработчик события для нажатия на кнопку "Купить"
+      buyButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+          // Получаем id товара из атрибута data-id кнопки
+          const productId = event.currentTarget.getAttribute("data-id");
+          const productName = event.currentTarget.getAttribute("data-name");
+          const productPrice = event.currentTarget.getAttribute("data-price");
+          const productImage = event.currentTarget.getAttribute("data-image");
+          // Получаем данные из localStorage
+          let cartItems = localStorage.getItem("cartItems");
+
+          // Если в локальном хранилище уже есть товары в корзине
+          if (cartItems) {
+            cartItems = JSON.parse(cartItems);
+            // Проверяем, есть ли текущий товар в корзине
+            if (!cartItems.includes(productId)) {
+              // Добавляем id товара в корзину
+              cartItems.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                img: productImage,
+                quantity: 1,
+              });
+              // Сохраняем обновленный список в localStorage
+              localStorage.setItem("cartItems", JSON.stringify(cartItems));
+              // Оповещаем пользователя о добавлении товара в корзину
+              alert("Товар успешно добавлен в корзину!");
+            } else {
+              // Если товар уже был добавлен в корзину, выводим сообщение об этом
+              alert("Этот товар уже добавлен в корзину!");
+            }
+          } else {
+            // Если в локальном хранилище еще нет товаров в корзине
+            cartItems = [
+              {
+                id: productId,
+                name: productName,
+                price: productPrice,
+                img: productImage,
+                quantity: 1,
+              },
+            ];
+            // Сохраняем список товаров в корзине в localStorage
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            // Оповещаем пользователя о добавлении товара в корзину
+            alert("Товар успішно додано до корзини!");
+          }
+        });
+      });
+
+      const starRating = document.getElementById("star-rating");
+      const starValue = starRating.querySelector(".star-value");
+      const ratingInput = document.getElementById("rating");
+
+      const stars = document.querySelectorAll(".star-rating .star");
+
+      stars.forEach(function (star) {
+        star.addEventListener("click", function () {
+          const clickedValue = parseInt(this.getAttribute("data-value"));
+          console.log(clickedValue);
+          stars.forEach(function (star) {
+            const value = parseInt(star.getAttribute("data-value"));
+
+            if (value <= clickedValue) {
+              star.classList.add("active");
+            } else {
+              star.classList.remove("active");
+            }
+          });
+
+          // Установим значение оценки в скрытое поле
+          document.getElementById("rating").value = clickedValue;
+        });
+      });
+
+      const commentForm = document.getElementById("comment-form");
+
+      // commentForm.addEventListener("submit", function (event) {
+      //   event.preventDefault();
+
+      //   const formData = new FormData(commentForm);
+      //   let csrf_tocken = document.cookie.match("csrftoken=(.*)")[1];
+      //   console.log(formData);
+      // fetch("http://127.0.0.1:8000/save_review/", {
+      //   method: "POST",
+      //   body: formData,
+      //   headers: { "X-CSRFToken": csrf_tocken },
+      // })
+      //   .then(function (response) {
+      //     if (!response.ok) {
+      //       throw new Error("Network response was not ok");
+      //     }
+      //     return response.text();
+      //   })
+      //   .then(function (data) {
+      //     console.log(data);
+      //     // В этом месте вы можете обработать ответ сервера, например, вывести сообщение об успешной отправке
+      //   })
+      //   .catch(function (error) {
+      //     console.error(
+      //       "There was a problem with your fetch operation:",
+      //       error
+      //     );
+      //   });
+      // });
+    });
+  </script>
 </html>

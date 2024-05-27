@@ -334,7 +334,10 @@
       </aside>
 
       <div class="main_content">
-        <h1>{{ category.name }}</h1>
+        <h1>{% if category %}{{ category.name }}; {% endif %}{% if subcategory %}{{ subcategory.name }}; {% endif %}{{ key_words }}{% if min_price %}Мінімальна ціна: {{ min_price }}; {% endif %}{% if max_price %}Максимальна ціна: {{ max_price }}{% endif %}
+        {% if manufacturer_id %}Країна виробник: {{ manufacturer.name }}; {% endif %}{% if color %}Колір: {{ color.name }};{% endif %}
+        </h1>
+      
         <div class="product-list">
           {% for product in products %}
           <div class="product-item">

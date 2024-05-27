@@ -35,10 +35,13 @@ class CategoryPageView(ListView):
         queryset = Product.objects.all()
         category_id = self.kwargs.get('category_id')
         subcategory_id = self.kwargs.get('subcategory_id')
+        key_words = self.request.GET.get('key_words')
         if subcategory_id:
             queryset = queryset.filter(sub_category_id=subcategory_id)
         elif category_id:
             queryset = queryset.filter(sub_category__category_id=category_id)
+        if key_words:
+            queryset = queryset.filter(name__icontains=key_words)
 
         # Фильтрация по цвету
         color_id = self.request.GET.get('color')
@@ -64,11 +67,21 @@ class CategoryPageView(ListView):
         context = super().get_context_data(**kwargs)
         category_id = self.kwargs.get('category_id')
         subcategory_id = self.kwargs.get('subcategory_id')
+        key_words = self.request.GET.get('key_words')
+        min_price = self.request.GET.get('min_price')
+        max_price = self.request.GET.get('max_price')
+        color_id = self.request.GET.get('color')
+        manufacturer_id = self.request.GET.get('manufacturer')
+        context['min_price'] = min_price
+        context['max_price'] = max_price
+        context['color'] = Color.objects.get(pk=color_id) if color_id else None
+        context['manufacturer'] = Manufacturer.objects.get(pk=manufacturer_id) if manufacturer_id else None
         if subcategory_id:
             context['subcategory'] = SubCategory.objects.get(pk=subcategory_id)
         elif category_id:
             context['category'] = Category.objects.get(pk=category_id)
-
+        if key_words:
+            context['key_words'] = key_words
         # Передача всех доступных цветов и производителей в контекст
         context['colors'] = Color.objects.all()
         context['manufacturers'] = Manufacturer.objects.all()

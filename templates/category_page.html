@@ -291,7 +291,7 @@
       <aside class="sidebar">
         <div class="header_nav">
           <h2>Фільтри</h2>
-          <form method="GET">
+          <form method="GET" action="{% url 'search_products' %}">
             <label for="color">Колір:</label>
             <select name="color" id="color">
               <option value="">Усі</option>
@@ -318,6 +318,7 @@
               min="0"
               step="0.01"
             /><br />
+              <input style="display: none" name="key_words" id="key_word" value="{{ key_words }}">
 
             <label for="max_price">Макс. ціна:</label>
             <input
@@ -334,7 +335,7 @@
       </aside>
 
       <div class="main_content">
-        <h1>{% if category %}{{ category.name }}; {% endif %}{% if subcategory %}{{ subcategory.name }}; {% endif %}{{ key_words }}{% if min_price %}Мінімальна ціна: {{ min_price }}; {% endif %}{% if max_price %}Максимальна ціна: {{ max_price }}{% endif %}
+        <h1>{% if category %}{{ category.name }}; {% endif %}{% if subcategory %}{{ subcategory.name }}; {% endif %}"{{ key_words }}"; {% if min_price %}Мінімальна ціна: {{ min_price }}; {% endif %}{% if max_price %}Максимальна ціна: {{ max_price }}{% endif %}
         {% if manufacturer_id %}Країна виробник: {{ manufacturer.name }}; {% endif %}{% if color %}Колір: {{ color.name }};{% endif %}
         </h1>
       

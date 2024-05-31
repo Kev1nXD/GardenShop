@@ -1,0 +1,21 @@
+<div class="product-item">
+   <a
+      href="http://127.0.0.1:8000/product_page/%s/"
+      class="product-link"
+      data-id="%s"
+      >
+      <img src="%s" alt="%s" />
+      <h3>%s</h3>
+      <p>%s</p>
+   </a>
+   <p class="price">%s грн.</p>
+   <button
+      class="buy-btn"
+      data-id="%s"
+      data-name="%s"
+      data-price="%s"
+      data-image="%s"
+      >
+   До кошика
+   </button>
+</div>

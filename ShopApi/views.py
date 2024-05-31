@@ -20,7 +20,6 @@ class ProductPageView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object.reviews.all().count() != 0:
-            
             context['raitings'] = round((float(self.object.rate) / self.object.reviews.all().count()), 2)
         return context
 
@@ -40,8 +39,6 @@ class CategoryPageView(ListView):
             queryset = queryset.filter(sub_category_id=subcategory_id)
         elif category_id:
             queryset = queryset.filter(sub_category__category_id=category_id)
-        if key_words:
-            queryset = queryset.filter(name__icontains=key_words)
 
         # Фильтрация по цвету
         color_id = self.request.GET.get('color')
@@ -60,6 +57,9 @@ class CategoryPageView(ListView):
             queryset = queryset.filter(price__gte=min_price)
         if max_price:
             queryset = queryset.filter(price__lte=max_price)
+        if key_words:
+            print(key_words)
+            queryset = queryset.filter(name__icontains=key_words)
 
         return queryset
 
@@ -108,5 +108,17 @@ class SaveReview(View):
             return redirect('product_page', pk=pk)
 
 
+class Recomendations(View):
+        @staticmethod
+        def buid_products_html(products):
+            html = ''
+            for product in products:
+                html += open('ShopApi/product_html.txt', 'r', encoding='utf-8').read() % (
+                product.pk, product.pk, product.image.url, product.name, product.name, product.description,
+                product.price, product.pk, product.name, product.price, product.image.url)
+            return html
 
-
+        def post(self, request, *args, **kwargs):
+            products = Product.objects.filter(rate__gte=4).order_by('-rate')[:5]
+            recommended_product = self.buid_products_html(products)
+            return JsonResponse({'recommended_product': recommended_product})

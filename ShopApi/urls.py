@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import MainPageView, ProductPageView, CategoryPageView, CartPageView, SaveReview
+from .views import MainPageView, ProductPageView, CategoryPageView, CartPageView, SaveReview, Recomendations
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -11,4 +11,6 @@ urlpatterns = [
     path(r'cart/', CartPageView.as_view(), name='cart_page'),
     
     path('save_review/', SaveReview.as_view(), name='save_review'),
+    path('search/', CategoryPageView.as_view(), name='search_products'),
+    path('recomendations/', Recomendations.as_view(), name='recomendations')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
